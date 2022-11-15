@@ -85,8 +85,9 @@ class MatrixElement {
 
             matrix[(x) * m + (y)] = val;
         }
+        else{
         matrix[y * n + x] = val;
-
+        }
     }
 
     static int[] multiply(int[] A, int[] B) {
@@ -94,7 +95,10 @@ class MatrixElement {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < p; j++) {
                 for (int k = 0; k < m; k++) {
-                    setValue(C, i, j, getValue(C, i, j) + getValue(A, i, k) * getValue(B, k, j));
+                    int currentVal = getValue(C, i, j);
+                    int aVal = getValue(A, i, k);
+                    int bVal = getValue(B, k, j);
+                    setValue(C, i, j, currentVal + aVal * bVal);
                 }
             }
         }
