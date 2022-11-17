@@ -1,4 +1,4 @@
-package CodeJudge;
+package app.src.main.java.matrix.multiplication;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -81,9 +81,8 @@ class MatrixElement {
         if (order.equals("C")) {
 
             matrix[(x) * m + (y)] = val;
-        }
-        else{
-        matrix[y * n + x] = val;
+        } else {
+            matrix[y * n + x] = val;
         }
     }
 
