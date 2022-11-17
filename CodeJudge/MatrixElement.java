@@ -70,13 +70,10 @@ class MatrixElement {
     }
 
     public static int getValue(int[] matrix, int x, int y) {
-
         if (order.equals("C")) {
-
             return matrix[(x) * m + (y)];
         }
         return matrix[y * n + x];
-
     }
 
     public static void setValue(int[] matrix, int x, int y, int val) {
