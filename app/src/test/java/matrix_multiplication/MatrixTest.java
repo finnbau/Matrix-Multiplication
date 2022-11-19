@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import matrix.multiplication.Matrix;
+
 public class MatrixTest {
     
     private static Matrix m2;
@@ -27,6 +29,8 @@ public class MatrixTest {
     @Test
     public void isEqualTest(){
         Matrix m2Copy = m2.copy();
-        
+        boolean expected = true;
+        boolean actual = m2.equals(m2Copy);
+        assertEquals(actual,expected);
     }
 }
