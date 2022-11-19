@@ -275,12 +275,16 @@ public class Matrix {
         }
 
         Matrix C = new Matrix(n, n);
-        for(int i=0;i<n/s;i++){ //Per instructions assumes n%s == 0
-            for(int j=0;j<n/s;j++){
-                for(int k=0;k<n/s;k++){
+        for(int i=0;i<n/s;i+=n/2){ //Per instructions assumes n%s == 0
+            for(int j=0;j<n/s;j+=n/2){
+
+                for(int k=0;k<n/s;k+=n/2){
                     Matrix cView = C.view(i, j, s, s);
+                    System.out.println(cView.toString());
                     Matrix aView = A.view(i, k, s, s);
+                    System.out.println(aView.toString());
                     Matrix bView = B.view(k,j,s,s);
+                    System.out.println(bView.toString());
                     elementaryMultiplication(aView, bView, cView);
                 }
             }
