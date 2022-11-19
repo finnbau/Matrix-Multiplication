@@ -1,4 +1,4 @@
-package matrix.multiplication;
+package matrix_multiplication;
 
 import java.util.ArrayList;
 import java.util.Scanner;

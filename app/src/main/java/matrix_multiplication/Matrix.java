@@ -1,4 +1,4 @@
-package matrix.multiplication;
+package matrix_multiplication;
 
 // add possible package statement here
 
@@ -169,29 +169,14 @@ public class Matrix {
      * @param A Left-hand operand
      * @param B Right-hand operand
      */
-    public static Matrix elementaryMultiplication(Matrix A, Matrix B, Matrix C) {
+    public static void elementaryMultiplication(Matrix A, Matrix B, Matrix C) {
         Matrix intermediary = elementaryMultiplication(A, B);
-        return matrixAddition(intermediary, C);
+        for(int i=0;i<C.rows*C.cols;i++){
+            C.data[i]+=intermediary.data[i];
+        }
     }
 
-    /**
-     * This method adds two matrixes together. Only works if they are the same
-     * shape.
-     * 
-     * @param A
-     * @param B
-     * @return
-     */
-    public static Matrix matrixAddition(Matrix A, Matrix B) {
-        if (A.rows != B.rows && A.cols != B.cols) {
-            throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
-        }
-        Matrix result = new Matrix(A.rows, A.cols);
-        for (int i = 0; i < A.data.length; i++) {
-            result.data[i] = A.data[i] + B.data[i];
-        }
-        return result;
-    }
+
 
     /**
      * Returns a transposed copy of the matrix.
@@ -258,8 +243,21 @@ public class Matrix {
      * @return Matrix C of size n*p satisfying C=AB.
      */
     public static Matrix elementaryMultiplicationTransposed(Matrix A, Matrix B, int s) {
-        /* Fill here the missing implementation */
-        return null;
+        int n = A.rows;
+        Matrix bTransposed = transpose(B);
+        Matrix C = new Matrix(n, n);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    double currentVal = C.data[C.start + i * C.stride + j];
+                    double aVal = A.data[A.start + i * A.stride + k];
+                    double bVal = bTransposed.data[bTransposed.start + j * bTransposed.stride + k];
+                    C.data[C.start + i * C.stride + j] = currentVal + (aVal * bVal);
+                }
+            }
+        }
+
+        return C;
     }
 
     /**
@@ -334,7 +332,12 @@ public class Matrix {
      * @param B The right-hand-side operand
      */
     public void add(Matrix B) {
-        /* Fill here the missing implementation */
+        if (this.rows != B.rows && this.cols != B.cols) {
+            throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
+        }
+        for(int i=0;i<this.rows*this.cols;i++){
+            this.data[i]+=B.data[i];
+        }
     }
 
     /**
@@ -345,8 +348,14 @@ public class Matrix {
      * @return Matrix C satisfying C=A+B
      */
     public static Matrix add(Matrix A, Matrix B) {
-        /* Fill here the missing implementation */
-        return null;
+        if (A.rows != B.rows && A.cols != B.cols) {
+            throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
+        }
+        Matrix result = new Matrix(A.rows, A.cols);
+        for (int i = 0; i < A.data.length; i++) {
+            result.data[i] = A.data[i] + B.data[i];
+        }
+        return result;
     }
 
     /**
@@ -357,7 +366,12 @@ public class Matrix {
      * @param C Output matrix
      */
     public static void add(Matrix A, Matrix B, Matrix C) {
-        /* Fill here the missing implementation */
+        if (A.rows != B.rows && A.cols != B.cols && A.rows!=C.rows && A.cols!=C.cols) {
+            throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
+        }
+        for(int i=0;i<A.rows*A.cols;i++){
+            C.data[i]=A.data[i]+B.data[i];
+        }
     }
 
     /**
@@ -366,7 +380,12 @@ public class Matrix {
      * @param B The right-hand-side operand
      */
     public void sub(Matrix B) {
-        /* Fill here the missing implementation */
+        if (this.rows != B.rows && this.cols != B.cols) {
+            throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
+        }
+        for(int i=0;i<this.rows*this.cols;i++){
+            this.data[i]-=B.data[i];
+        }
     }
 
     /**
@@ -377,8 +396,14 @@ public class Matrix {
      * @return Matrix C satisfying C=A-B
      */
     public static Matrix sub(Matrix A, Matrix B) {
-        /* Fill here the missing implementation */
-        return null;
+        if (A.rows != B.rows && A.cols != B.cols) {
+            throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
+        }
+        Matrix result = new Matrix(A.rows, A.cols);
+        for (int i = 0; i < A.data.length; i++) {
+            result.data[i] = A.data[i] - B.data[i];
+        }
+        return result;
     }
 
     /**
@@ -389,7 +414,12 @@ public class Matrix {
      * @param C Output matrix
      */
     public static void sub(Matrix A, Matrix B, Matrix C) {
-        /* Fill here the missing implementation */
+        if (A.rows != B.rows && A.cols != B.cols && A.rows!=C.rows && A.cols!=C.cols) {
+            throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
+        }
+        for(int i=0;i<A.rows*A.cols;i++){
+            C.data[i]=A.data[i]-B.data[i];
+        }
     }
 
     /**
