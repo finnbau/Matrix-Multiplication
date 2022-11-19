@@ -269,8 +269,20 @@ public class Matrix {
      * @return Matrix C satisfying C=AB.
      */
     public static Matrix tiledMultiplication(Matrix A, Matrix B, int s) {
-        /* Fill here the missing implementation */
-        return null;
+        int n = A.rows;
+        Matrix C = new Matrix(n, n);
+        for(int i=0;i<n/s;i++){ //Per instructions assumes n%s == 0
+            for(int j=0;j<n/s;j++){
+                for(int k=0;k<n/s;k++){
+                    Matrix cView = C.view(i, j, s, s);
+                    Matrix aView = A.view(i, k, s, s);
+                    Matrix bView = B.view(k,j,s,s);
+                    elementaryMultiplication(aView, bView, cView);
+                }
+            }
+        }
+
+        return C;
     }
 
     /**

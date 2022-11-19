@@ -12,7 +12,9 @@ public class AMain {
 
         Matrix t1 = Matrix.elementaryMultiplication(A, A);
         Matrix t2 = Matrix.elementaryMultiplicationTransposed(A, A, 3);
+        Matrix t3 = Matrix.tiledMultiplication(A, A, 6);
         System.out.println(t1.equals(t2));
+        System.out.println(t1.equals(t3));
 
         // System.out.println(A.view(0, 0, n/2, n/2).toString());
         // System.out.println();
