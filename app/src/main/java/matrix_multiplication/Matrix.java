@@ -270,6 +270,10 @@ public class Matrix {
      */
     public static Matrix tiledMultiplication(Matrix A, Matrix B, int s) {
         int n = A.rows;
+        if (n%s!=0) {
+            throw new RuntimeException("Faulty use of tiledMultiplication, s does not divide n.");
+        }
+
         Matrix C = new Matrix(n, n);
         for(int i=0;i<n/s;i++){ //Per instructions assumes n%s == 0
             for(int j=0;j<n/s;j++){
