@@ -1,6 +1,5 @@
 package matrix_multiplication;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 class MatrixElement {
@@ -67,6 +66,7 @@ class MatrixElement {
         for (int i : C) {
             System.out.println(i);
         }
+        sc.close();
     }
 
     public static int getValue(int[] matrix, int x, int y) {
