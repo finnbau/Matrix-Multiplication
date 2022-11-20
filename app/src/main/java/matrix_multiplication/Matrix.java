@@ -170,13 +170,8 @@ public class Matrix {
      * @param B Right-hand operand
      */
     public static void elementaryMultiplication(Matrix A, Matrix B, Matrix C) {
-        Matrix intermediary = elementaryMultiplication(A, B);
-        for(int i=0;i<C.rows*C.cols;i++){
-            C.data[i]+=intermediary.data[i];
-        }
+        /* Fill here the missing implementation */
     }
-
-
 
     /**
      * Returns a transposed copy of the matrix.
@@ -270,22 +265,32 @@ public class Matrix {
      */
     public static Matrix tiledMultiplication(Matrix A, Matrix B, int s) {
         int n = A.rows;
-        if (n%s!=0) {
+        if (n % s != 0) {
             throw new RuntimeException("Faulty use of tiledMultiplication, s does not divide n.");
         }
 
         Matrix C = new Matrix(n, n);
-        for(int i=0;i<n/s;i+=n/2){ //Per instructions assumes n%s == 0
-            for(int j=0;j<n/s;j+=n/2){
+        for (int i = 0; i < n / s; i++) { // Per instructions assumes n%s == 0
+            for (int j = 0; j < n / s; j++) {
+                for (int k = 0; k < n / s; k++) {
 
-                for(int k=0;k<n/s;k+=n/2){
-                    Matrix cView = C.view(i, j, s, s);
-                    System.out.println(cView.toString());
-                    Matrix aView = A.view(i, k, s, s);
-                    System.out.println(aView.toString());
-                    Matrix bView = B.view(k,j,s,s);
-                    System.out.println(bView.toString());
-                    elementaryMultiplication(aView, bView, cView);
+                    int a_i0 = i * s;
+                    int a_j0 = k * s;
+                    int b_i0 = k * s;
+                    int b_j0 = j * s;
+
+                    Matrix aView = A.view(a_i0, a_j0, s, s);
+                    Matrix bView = B.view(b_i0, b_j0, s, s);
+                    Matrix intermediary = elementaryMultiplication(aView, bView);
+
+                    int index = 0;
+                    // Identify the index of the upper left corner of the current tile.
+                    int base = j * s + i * s * n;
+                    for (int row = 0; row < intermediary.rows; row++) {
+                        for (int col = 0; col < intermediary.cols; col++) {
+                            C.data[base + col + row * C.stride] += intermediary.data[index++];
+                        }
+                    }
                 }
             }
         }
@@ -355,8 +360,8 @@ public class Matrix {
         if (this.rows != B.rows && this.cols != B.cols) {
             throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
         }
-        for(int i=0;i<this.rows*this.cols;i++){
-            this.data[i]+=B.data[i];
+        for (int i = 0; i < this.rows * this.cols; i++) {
+            this.data[i] += B.data[i];
         }
     }
 
@@ -386,11 +391,11 @@ public class Matrix {
      * @param C Output matrix
      */
     public static void add(Matrix A, Matrix B, Matrix C) {
-        if (A.rows != B.rows && A.cols != B.cols && A.rows!=C.rows && A.cols!=C.cols) {
+        if (A.rows != B.rows && A.cols != B.cols && A.rows != C.rows && A.cols != C.cols) {
             throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
         }
-        for(int i=0;i<A.rows*A.cols;i++){
-            C.data[i]=A.data[i]+B.data[i];
+        for (int i = 0; i < A.rows * A.cols; i++) {
+            C.data[i] = A.data[i] + B.data[i];
         }
     }
 
@@ -403,8 +408,8 @@ public class Matrix {
         if (this.rows != B.rows && this.cols != B.cols) {
             throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
         }
-        for(int i=0;i<this.rows*this.cols;i++){
-            this.data[i]-=B.data[i];
+        for (int i = 0; i < this.rows * this.cols; i++) {
+            this.data[i] -= B.data[i];
         }
     }
 
@@ -434,11 +439,11 @@ public class Matrix {
      * @param C Output matrix
      */
     public static void sub(Matrix A, Matrix B, Matrix C) {
-        if (A.rows != B.rows && A.cols != B.cols && A.rows!=C.rows && A.cols!=C.cols) {
+        if (A.rows != B.rows && A.cols != B.cols && A.rows != C.rows && A.cols != C.cols) {
             throw new RuntimeException("Faulty addition, matrixes were not of same shape.");
         }
-        for(int i=0;i<A.rows*A.cols;i++){
-            C.data[i]=A.data[i]-B.data[i];
+        for (int i = 0; i < A.rows * A.cols; i++) {
+            C.data[i] = A.data[i] - B.data[i];
         }
     }
 
