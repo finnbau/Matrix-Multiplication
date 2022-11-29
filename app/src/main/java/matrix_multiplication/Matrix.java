@@ -408,61 +408,43 @@ public class Matrix {
                 strassen(p[i], q[i], m[i], s);
             }
 
-            Matrix intermediary = add(add(m[0], sub(m[3], m[4])), m[6]);
             int base = 0;
             int index = 0;
-            for (int row = 0; row < intermediary.rows; row++) {
-                for (int col = 0; col < intermediary.cols; col++) {
-                    C.data[base + col + row * C.stride] = intermediary.data[index++];
+            for (int row = 0; row < n / 2; row++) {
+                for (int col = 0; col < n / 2; col++) {
+                    C.data[base + col + row * C.stride] = m[3].data[index] - m[4].data[index] + m[0].data[index]
+                            + m[6].data[index];
+                    index++;
                 }
             }
 
-            intermediary = add(m[2], m[4]);
             base = n / 2;
             index = 0;
-            for (int row = 0; row < intermediary.rows; row++) {
-                for (int col = 0; col < intermediary.cols; col++) {
-                    C.data[base + col + row * C.stride] = intermediary.data[index++];
+            for (int row = 0; row < n / 2; row++) {
+                for (int col = 0; col < n / 2; col++) {
+                    C.data[base + col + row * C.stride] = m[2].data[index] + m[4].data[index];
+                    index++;
                 }
             }
 
-            intermediary = add(m[1], m[3]);
             base = n / 2 * C.stride;
             index = 0;
-            for (int row = 0; row < intermediary.rows; row++) {
-                for (int col = 0; col < intermediary.cols; col++) {
-                    C.data[base + col + row * C.stride] = intermediary.data[index++];
-                }
-            }
-            intermediary = add(add(sub(m[0], m[1]), m[2]), m[5]);
-            base = n / 2 * C.stride + n / 2;
-            index = 0;
-            for (int row = 0; row < intermediary.rows; row++) {
-                for (int col = 0; col < intermediary.cols; col++) {
-                    C.data[base + col + row * C.stride] = intermediary.data[index++];
+            for (int row = 0; row < n / 2; row++) {
+                for (int col = 0; col < n / 2; col++) {
+                    C.data[base + col + row * C.stride] = m[1].data[index] + m[3].data[index];
+                    index++;
                 }
             }
 
-            // Matrix c11 = C.view(one, one, n / 2, n / 2);
-            // for (int i = c11.start; i < c11.start + n / 2; i++) {
-            // c11.data[i] = m[0].data[i - c11.start] + m[3].data[i - c11.start] -
-            // m[4].data[i - c11.start]
-            // + m[6].data[i - c11.start];
-            // }
-            // Matrix c12 = C.view(one, two, n / 2, n / 2);
-            // for (int i = c12.start; i < c12.start + n / 2; i++) {
-            // c12.data[i] = m[2].data[i - c12.start] + m[4].data[i - c12.start];
-            // }
-            // Matrix c21 = C.view(two, one, n / 2, n / 2);
-            // for (int i = c21.start; i < c21.start + n / 2; i++) {
-            // c21.data[i] = m[1].data[i - c21.start] + m[3].data[i - c21.start];
-            // }
-            // Matrix c22 = C.view(two, two, n / 2, n / 2);
-            // for (int i = c22.start; i < c22.start + n / 2; i++) {
-            // c22.data[i] = m[0].data[i - c22.start] - m[1].data[i - c22.start] +
-            // m[2].data[i - c22.start]
-            // + m[5].data[i - c22.start];
-            // }
+            base = n / 2 * C.stride + n / 2;
+            index = 0;
+            for (int row = 0; row < n / 2; row++) {
+                for (int col = 0; col < n / 2; col++) {
+                    C.data[base + col + row * C.stride] = m[0].data[index] - m[1].data[index] + m[2].data[index]
+                            + m[5].data[index];
+                    index++;
+                }
+            }
         }
     }
 
