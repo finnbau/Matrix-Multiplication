@@ -333,27 +333,33 @@ public class Matrix {
      * @param s Subproblem size
      */
     public static void recursiveMultiplication(Matrix A, Matrix B, Matrix C, int s) {
-        //TODO: throw exception if A, B and C are not same shape.
-        
+        // TODO: throw exception if A, B and C are not same shape.
+
         int n = A.rows;
 
-        if(n==1){
-            C.data[C.start] = A.data[A.start]*B.data[B.start];
-        }
-        else if(n<=s){
+        if (n == 1) {
+            C.data[C.start] = A.data[A.start] * B.data[B.start];
+        } else if (n <= s) {
             elementaryMultiplication(A, B, C);
-        }
-        else{
+        } else {
             int one = A.start;
-            int two = A.start+n/2;
-            recursiveMultiplication(A.view(one, one, n/2, n/2), B.view(one, one, n/2, n/2), C.view(one, one, n/2, n/2), s);
-            recursiveMultiplication(A.view(one, two, n/2, n/2), B.view(two, one, n/2, n/2), C.view(one, one, n/2, n/2), s);
-            recursiveMultiplication(A.view(one, one, n/2, n/2), B.view(one, two, n/2, n/2), C.view(one, two, n/2, n/2), s);
-            recursiveMultiplication(A.view(one, two, n/2, n/2), B.view(two, two, n/2, n/2), C.view(one, two, n/2, n/2), s);
-            recursiveMultiplication(A.view(two, one, n/2, n/2), B.view(one, one, n/2, n/2), C.view(two, one, n/2, n/2), s);
-            recursiveMultiplication(A.view(two, two, n/2, n/2), B.view(two, one, n/2, n/2), C.view(two, one, n/2, n/2), s);
-            recursiveMultiplication(A.view(two, one, n/2, n/2), B.view(one, two, n/2, n/2), C.view(two, two, n/2, n/2), s);
-            recursiveMultiplication(A.view(two, two, n/2, n/2), B.view(two, two, n/2, n/2), C.view(two, two, n/2, n/2), s);
+            int two = A.start + n / 2;
+            recursiveMultiplication(A.view(one, one, n / 2, n / 2), B.view(one, one, n / 2, n / 2),
+                    C.view(one, one, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(one, two, n / 2, n / 2), B.view(two, one, n / 2, n / 2),
+                    C.view(one, one, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(one, one, n / 2, n / 2), B.view(one, two, n / 2, n / 2),
+                    C.view(one, two, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(one, two, n / 2, n / 2), B.view(two, two, n / 2, n / 2),
+                    C.view(one, two, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(two, one, n / 2, n / 2), B.view(one, one, n / 2, n / 2),
+                    C.view(two, one, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(two, two, n / 2, n / 2), B.view(two, one, n / 2, n / 2),
+                    C.view(two, one, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(two, one, n / 2, n / 2), B.view(one, two, n / 2, n / 2),
+                    C.view(two, two, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(two, two, n / 2, n / 2), B.view(two, two, n / 2, n / 2),
+                    C.view(two, two, n / 2, n / 2), s);
         }
     }
 
@@ -367,7 +373,97 @@ public class Matrix {
      *          an O(n^3) algorithm will be used.
      */
     public static void strassen(Matrix A, Matrix B, Matrix C, int s) {
-        /* Fill here the missing implementation */
+        int n = A.rows;
+        int one = A.start;
+        int two = A.start + n / 2;
+        if (n == 1) {
+            C.data[C.start] = C.data[C.start] + A.data[A.start] * B.data[B.start];
+        } else if (n <= s) {
+            elementaryMultiplication(A, B, C);
+        }
+
+        else {
+            Matrix[] p = new Matrix[] {
+                    add(A.view(one, one, n / 2, n / 2).copy(), A.view(two, two, n / 2, n / 2).copy()),
+                    add(A.view(two, one, n / 2, n / 2).copy(), A.view(two, two, n / 2, n / 2).copy()),
+                    A.view(one, one, n / 2, n / 2).copy(), A.view(two, two, n / 2, n / 2).copy(),
+                    add(A.view(one, one, n / 2, n / 2).copy(), A.view(one, two, n / 2, n / 2).copy()),
+                    sub(A.view(two, one, n / 2, n / 2).copy(), A.view(one, one, n / 2, n / 2).copy()),
+                    sub(A.view(one, two, n / 2, n / 2).copy(), A.view(two, two, n / 2, n / 2).copy()) };
+
+            Matrix[] q = new Matrix[] {
+                    add(B.view(one, one, n / 2, n / 2).copy(), B.view(two, two, n / 2, n / 2).copy()),
+                    B.view(one, one, n / 2, n / 2).copy(),
+                    sub(B.view(one, two, n / 2, n / 2).copy(), B.view(two, two, n / 2, n / 2).copy()),
+                    sub(B.view(two, one, n / 2, n / 2).copy(), B.view(one, one, n / 2, n / 2).copy()),
+                    B.view(two, two, n / 2, n / 2).copy(),
+                    add(B.view(one, one, n / 2, n / 2).copy(), B.view(one, two, n / 2, n / 2).copy()),
+                    add(B.view(two, one, n / 2, n / 2).copy(), B.view(two, two, n / 2, n / 2).copy()) };
+
+            Matrix[] m = new Matrix[] { new Matrix(n / 2, n / 2), new Matrix(n / 2, n / 2), new Matrix(n / 2, n / 2),
+                    new Matrix(n / 2, n / 2), new Matrix(n / 2, n / 2), new Matrix(n / 2, n / 2),
+                    new Matrix(n / 2, n / 2) };
+
+            for (int i = 0; i < 7; i++) {
+                strassen(p[i], q[i], m[i], s);
+            }
+
+            Matrix intermediary = add(add(m[0], sub(m[3], m[4])), m[6]);
+            int base = 0;
+            int index = 0;
+            for (int row = 0; row < intermediary.rows; row++) {
+                for (int col = 0; col < intermediary.cols; col++) {
+                    C.data[base + col + row * C.stride] = intermediary.data[index++];
+                }
+            }
+
+            intermediary = add(m[2], m[4]);
+            base = n / 2;
+            index = 0;
+            for (int row = 0; row < intermediary.rows; row++) {
+                for (int col = 0; col < intermediary.cols; col++) {
+                    C.data[base + col + row * C.stride] = intermediary.data[index++];
+                }
+            }
+
+            intermediary = add(m[1], m[3]);
+            base = n / 2 * C.stride;
+            index = 0;
+            for (int row = 0; row < intermediary.rows; row++) {
+                for (int col = 0; col < intermediary.cols; col++) {
+                    C.data[base + col + row * C.stride] = intermediary.data[index++];
+                }
+            }
+            intermediary = add(add(sub(m[0], m[1]), m[2]), m[5]);
+            base = n / 2 * C.stride + n / 2;
+            index = 0;
+            for (int row = 0; row < intermediary.rows; row++) {
+                for (int col = 0; col < intermediary.cols; col++) {
+                    C.data[base + col + row * C.stride] = intermediary.data[index++];
+                }
+            }
+
+            // Matrix c11 = C.view(one, one, n / 2, n / 2);
+            // for (int i = c11.start; i < c11.start + n / 2; i++) {
+            // c11.data[i] = m[0].data[i - c11.start] + m[3].data[i - c11.start] -
+            // m[4].data[i - c11.start]
+            // + m[6].data[i - c11.start];
+            // }
+            // Matrix c12 = C.view(one, two, n / 2, n / 2);
+            // for (int i = c12.start; i < c12.start + n / 2; i++) {
+            // c12.data[i] = m[2].data[i - c12.start] + m[4].data[i - c12.start];
+            // }
+            // Matrix c21 = C.view(two, one, n / 2, n / 2);
+            // for (int i = c21.start; i < c21.start + n / 2; i++) {
+            // c21.data[i] = m[1].data[i - c21.start] + m[3].data[i - c21.start];
+            // }
+            // Matrix c22 = C.view(two, two, n / 2, n / 2);
+            // for (int i = c22.start; i < c22.start + n / 2; i++) {
+            // c22.data[i] = m[0].data[i - c22.start] - m[1].data[i - c22.start] +
+            // m[2].data[i - c22.start]
+            // + m[5].data[i - c22.start];
+            // }
+        }
     }
 
     /**
