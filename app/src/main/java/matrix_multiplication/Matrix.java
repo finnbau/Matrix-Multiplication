@@ -24,7 +24,11 @@ public class Matrix {
      * array)
      */
     public int stride = 0;
-
+    /**
+     * 
+     */
+    public int one = 0;
+    public int two = rows/2;
     /**
      * The full constructor
      * 
@@ -40,6 +44,7 @@ public class Matrix {
         this.data = data;
         this.start = start;
         this.stride = stride;
+        this.two = rows/2;
     }
 
     /**
@@ -231,10 +236,10 @@ public class Matrix {
         if (n <= s) {
             transpose(A, B);
         } else {
-            transposeRec(A.view(0, 0, n / 2, n / 2), B.view(0, 0, n / 2, n / 2), s);
-            transposeRec(A.view(n / 2, 0, n / 2, n / 2), B.view(n / 2, 0, n / 2, n / 2), s);
-            transposeRec(A.view(0, n / 2, n / 2, n / 2), B.view(0, n / 2, n / 2, n / 2), s);
-            transposeRec(A.view(n / 2, n / 2, n / 2, n / 2), B.view(n / 2, n / 2, n / 2, n / 2), s);
+            transposeRec(A.view(A.one, A.one, n / 2, n / 2), B.view(B.one, B.one, n / 2, n / 2), s);
+            transposeRec(A.view(A.one, A.two, n / 2, n / 2), B.view(B.two, B.one, n / 2, n / 2), s);
+            transposeRec(A.view(A.two, A.one, n / 2, n / 2), B.view(B.one, B.two, n / 2, n / 2), s);
+            transposeRec(A.view(A.two, A.two, n / 2, n / 2), B.view(B.two, B.two, n / 2, n / 2), s);
         }
     }
 
@@ -404,28 +409,26 @@ public class Matrix {
         int n = A.rows;
 
         if (n == 1) {
-            C.data[C.start] = A.data[A.start] * B.data[B.start];
+            C.data[C.start] += A.data[A.start] * B.data[B.start];
         } else if (n <= s) {
             elementaryMultiplication(A, B, C);
         } else {
-            int one = A.start;
-            int two = A.start + n / 2;
-            recursiveMultiplication(A.view(one, one, n / 2, n / 2), B.view(one, one, n / 2, n / 2),
-                    C.view(one, one, n / 2, n / 2), s);
-            recursiveMultiplication(A.view(one, two, n / 2, n / 2), B.view(two, one, n / 2, n / 2),
-                    C.view(one, one, n / 2, n / 2), s);
-            recursiveMultiplication(A.view(one, one, n / 2, n / 2), B.view(one, two, n / 2, n / 2),
-                    C.view(one, two, n / 2, n / 2), s);
-            recursiveMultiplication(A.view(one, two, n / 2, n / 2), B.view(two, two, n / 2, n / 2),
-                    C.view(one, two, n / 2, n / 2), s);
-            recursiveMultiplication(A.view(two, one, n / 2, n / 2), B.view(one, one, n / 2, n / 2),
-                    C.view(two, one, n / 2, n / 2), s);
-            recursiveMultiplication(A.view(two, two, n / 2, n / 2), B.view(two, one, n / 2, n / 2),
-                    C.view(two, one, n / 2, n / 2), s);
-            recursiveMultiplication(A.view(two, one, n / 2, n / 2), B.view(one, two, n / 2, n / 2),
-                    C.view(two, two, n / 2, n / 2), s);
-            recursiveMultiplication(A.view(two, two, n / 2, n / 2), B.view(two, two, n / 2, n / 2),
-                    C.view(two, two, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(A.one, A.one, n / 2, n / 2), B.view(B.one, B.one, n / 2, n / 2),
+                    C.view(C.one, C.one, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(A.one, A.two, n / 2, n / 2), B.view(B.two, B.one, n / 2, n / 2),
+                    C.view(C.one, C.one, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(A.one, A.one, n / 2, n / 2), B.view(B.one, B.two, n / 2, n / 2),
+                    C.view(C.one, C.two, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(A.one, A.two, n / 2, n / 2), B.view(B.two, B.two, n / 2, n / 2),
+                    C.view(C.one, C.two, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(A.two, A.one, n / 2, n / 2), B.view(B.one, B.one, n / 2, n / 2),
+                    C.view(C.two, C.one, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(A.two, A.two, n / 2, n / 2), B.view(B.two, B.one, n / 2, n / 2),
+                    C.view(C.two, C.one, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(A.two, A.one, n / 2, n / 2), B.view(B.one, B.two, n / 2, n / 2),
+                    C.view(C.two, C.two, n / 2, n / 2), s);
+            recursiveMultiplication(A.view(A.two, A.two, n / 2, n / 2), B.view(B.two, B.two, n / 2, n / 2),
+                    C.view(C.two, C.two, n / 2, n / 2), s);
         }
     }
 

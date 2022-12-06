@@ -74,7 +74,7 @@ public class recursiveMultiplicationTest {
     @Test
     public void elementaryMultiplicationTest_m2() {
         Matrix C = new Matrix(2, 2);
-        Matrix.recursiveMultiplication(m2, m2, C, 1);
+        Matrix.recursiveMultiplication(m2, m2, C, 2);
         Matrix expected = m2_squared;
         assertEquals(expected, C);
     }
@@ -82,7 +82,7 @@ public class recursiveMultiplicationTest {
     @Test
     public void elementaryMultiplicationTest_m4() {
         Matrix C = new Matrix(4, 4);
-        Matrix.recursiveMultiplication(m4, m4, C, 1);
+        Matrix.recursiveMultiplication(m4, m4, C, 2);
         Matrix expected = m4_squared;
         assertEquals(expected, C);
     }
@@ -90,7 +90,7 @@ public class recursiveMultiplicationTest {
     @Test
     public void elementaryMultiplicationTest_m8() {
         Matrix C = new Matrix(8, 8);
-        Matrix.recursiveMultiplication(m8, m8, C, 1);
+        Matrix.recursiveMultiplication(m8, m8, C, 2);
         Matrix expected = m8_squared;
         assertEquals(expected, C);
     }
@@ -98,7 +98,7 @@ public class recursiveMultiplicationTest {
     @Test
     public void elementaryMultiplicationTest_m16() {
         Matrix C = new Matrix(16, 16);
-        Matrix.recursiveMultiplication(m16, m16, C, 1);
+        Matrix.recursiveMultiplication(m16, m16, C, 2);
         Matrix expected = m16_squared;
         assertEquals(expected, C);
     }
