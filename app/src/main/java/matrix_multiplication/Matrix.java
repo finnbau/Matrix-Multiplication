@@ -266,6 +266,31 @@ public class Matrix {
         return C;
     }
 
+        /**
+     * Performs the O(n^3) elementary multiplication with three nested loops.
+     * A transposed copy of the right-hand operand is constructed before
+     * computing the multiplication, using the transposeRec function.
+     * 
+     * @param A Left-hand input of size n*m.
+     * @param B Right-hand input of size m*p.
+     * @param C The result of A*B, stored in-place.
+     * @param s The minimum size parameter for transposeRec.
+     */
+    public static void elementaryMultiplicationTransposed(Matrix A, Matrix B, Matrix C, int s) {
+        int n = A.rows;
+        Matrix bTransposed = transpose(B);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    double currentVal = C.data[C.start + i * C.stride + j];
+                    double aVal = A.data[A.start + i * A.stride + k];
+                    double bVal = bTransposed.data[bTransposed.start + j * bTransposed.stride + k];
+                    C.data[C.start + i * C.stride + j] = currentVal + (aVal * bVal);
+                }
+            }
+        }
+    }
+
     /**
      * Performs tiled matrix multiplication using a tile size of s*s.
      * 
@@ -307,6 +332,47 @@ public class Matrix {
         }
 
         return C;
+    }
+
+        /**
+     * Performs tiled matrix multiplication using a tile size of s*s.
+     * 
+     * @param A Left-hand input.
+     * @param B Right-hand input.
+     * @param C The resulting matrix, in place.
+     * @param s Tile size.
+     * @return Matrix C satisfying C=AB.
+     */
+    public static void tiledMultiplication(Matrix A, Matrix B, Matrix C, int s) {
+        int n = A.rows;
+        if (n % s != 0) {
+            throw new RuntimeException("Faulty use of tiledMultiplication, s does not divide n.");
+        }
+
+        for (int i = 0; i < n / s; i++) { // Per instructions assumes n%s == 0
+            for (int j = 0; j < n / s; j++) {
+                for (int k = 0; k < n / s; k++) {
+
+                    int a_i0 = i * s;
+                    int a_j0 = k * s;
+                    int b_i0 = k * s;
+                    int b_j0 = j * s;
+
+                    Matrix aView = A.view(a_i0, a_j0, s, s);
+                    Matrix bView = B.view(b_i0, b_j0, s, s);
+                    Matrix intermediary = elementaryMultiplication(aView, bView);
+
+                    int index = 0;
+                    // Identify the index of the upper left corner of the current tile.
+                    int base = j * s + i * s * n;
+                    for (int row = 0; row < intermediary.rows; row++) {
+                        for (int col = 0; col < intermediary.cols; col++) {
+                            C.data[base + col + row * C.stride] += intermediary.data[index++];
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
