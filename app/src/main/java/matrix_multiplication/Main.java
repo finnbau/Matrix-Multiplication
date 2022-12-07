@@ -17,6 +17,7 @@ public class Main {
         int s;
         if(args.length==3){s = Integer.parseInt(args[2]);}
         else{s = 1;} //Default s if none is given. Should never be used.
+        int oneMillion = 1000000;
 
         /* Initialize the matrixes. 
          * They are all n*n, A and B are identical, while C is empty.
@@ -32,7 +33,7 @@ public class Main {
             long start = System.nanoTime();
             Matrix.elementaryMultiplication(A, B, C);
             long end = System.nanoTime();
-            System.out.println(end-start);
+            System.out.println((end-start)/oneMillion);
         }//Elementary multiplication.
 
 
@@ -41,7 +42,7 @@ public class Main {
             long start = System.nanoTime();
             Matrix.transposeRec(A, C, s);
             long end = System.nanoTime();
-            System.out.println(end-start);
+            System.out.println((end-start)/oneMillion);
         }//End of Task 4.
 
         /*Transposed Matrix Multiplication */
@@ -49,7 +50,7 @@ public class Main {
             long start = System.nanoTime();
             Matrix.elementaryMultiplicationTransposed(A, B, C, s);
             long end = System.nanoTime();
-            System.out.println(end-start);
+            System.out.println((end-start)/oneMillion);
         }//End Transposed Matrix Multiplication.
 
         /*Tiled Matrix Multiplication */
@@ -57,7 +58,7 @@ public class Main {
             long start = System.nanoTime();
             Matrix.tiledMultiplication(A, B, C, s);
             long end = System.nanoTime();
-            System.out.println(end-start);
+            System.out.println((end-start)/oneMillion);
         }//End Transposed Matrix Multiplication.
 
         /*Recursive Matrix Multiplication */
@@ -65,7 +66,7 @@ public class Main {
             long start = System.nanoTime();
             Matrix.recursiveMultiplication(A, B, C, s);
             long end = System.nanoTime();
-            System.out.println(end-start);
+            System.out.println((end-start)/oneMillion);
         }//End Recursive Matrix Multiplication.
 
         /*Strassen Matrix Multiplication */
@@ -73,7 +74,7 @@ public class Main {
             long start = System.nanoTime();
             Matrix.strassen(A, B, C, s);
             long end = System.nanoTime();
-            System.out.println(end-start);
+            System.out.println((end-start)/oneMillion);
         }//End Strassen Matrix Multiplication.
 
         else{System.out.println("Something went wrong, check the runtime arguments...");}

@@ -148,7 +148,6 @@ public class Matrix {
      */
     public static Matrix elementaryMultiplication(Matrix A, Matrix B) {
         int n = A.rows;
-        int m = A.cols;
         int p = B.cols;
         Matrix C = new Matrix(n, p);
 
@@ -404,7 +403,10 @@ public class Matrix {
      * @param s Subproblem size
      */
     public static void recursiveMultiplication(Matrix A, Matrix B, Matrix C, int s) {
-        // TODO: throw exception if A, B and C are not same shape.
+
+        if(A.cols!=B.cols || A.cols!=C.cols || A.rows!=B.rows || A.rows!=C.rows){
+            throw new RuntimeException("Recursive multiplication failed. Matrixes not of same shape.");
+        }
 
         int n = A.rows;
 
