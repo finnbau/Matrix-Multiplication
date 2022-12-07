@@ -216,8 +216,8 @@ public class Matrix {
      */
     public static void transpose(Matrix A, Matrix B) {
         int n = A.rows;
-        for (int i = A.start; i < n; i++) {
-            for (int j = A.start; j < n; j++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
                 B.data[B.start + j * B.stride + i] = A.data[A.start + i * A.stride + j];
             }
         }
