@@ -8,7 +8,7 @@ from time import sleep
 from numpy import delete, source
 ### This experiment is meant to determine the optimal s in regards to recursively transposing an algorithm.
 n_values = [2048, 4096, 8192] #Values of n to experiment on.
-s_values = [2,4,8,16,32,64,128]
+s_values = [2,4,8,16,32,64,128, 256,512]
 trials = 100 #Amount of runs pr. n
 
 JAR: str = 'app/build/libs/app.jar'
