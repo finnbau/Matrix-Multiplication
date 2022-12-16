@@ -28,7 +28,8 @@ public class Matrix {
      * 
      */
     public int one = 0;
-    public int two = rows/2;
+    public int two = rows / 2;
+
     /**
      * The full constructor
      * 
@@ -44,7 +45,7 @@ public class Matrix {
         this.data = data;
         this.start = start;
         this.stride = stride;
-        this.two = rows/2;
+        this.two = rows / 2;
     }
 
     /**
@@ -254,7 +255,8 @@ public class Matrix {
      */
     public static Matrix elementaryMultiplicationTransposed(Matrix A, Matrix B, int s) {
         int n = A.rows;
-        Matrix bTransposed = transpose(B);
+        Matrix bTransposed = new Matrix(n, n);
+        transposeRec(B, bTransposed, s);
         Matrix C = new Matrix(n, n);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -270,7 +272,7 @@ public class Matrix {
         return C;
     }
 
-        /**
+    /**
      * Performs the O(n^3) elementary multiplication with three nested loops.
      * A transposed copy of the right-hand operand is constructed before
      * computing the multiplication, using the transposeRec function.
@@ -282,7 +284,8 @@ public class Matrix {
      */
     public static void elementaryMultiplicationTransposed(Matrix A, Matrix B, Matrix C, int s) {
         int n = A.rows;
-        Matrix bTransposed = transpose(B);
+        Matrix bTransposed = new Matrix(n, n);
+        transposeRec(B, bTransposed, s);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 for (int k = 0; k < n; k++) {
@@ -338,7 +341,7 @@ public class Matrix {
         return C;
     }
 
-        /**
+    /**
      * Performs tiled matrix multiplication using a tile size of s*s.
      * 
      * @param A Left-hand input.
@@ -404,7 +407,7 @@ public class Matrix {
      */
     public static void recursiveMultiplication(Matrix A, Matrix B, Matrix C, int s) {
 
-        if(A.cols!=B.cols || A.cols!=C.cols || A.rows!=B.rows || A.rows!=C.rows){
+        if (A.cols != B.cols || A.cols != C.cols || A.rows != B.rows || A.rows != C.rows) {
             throw new RuntimeException("Recursive multiplication failed. Matrixes not of same shape.");
         }
 
