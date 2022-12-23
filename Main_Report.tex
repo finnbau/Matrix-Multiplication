@@ -1,0 +1,116 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+
+% Update this information to reflect yourself
+\title{%
+  Exam Assignment \\
+  \large Multiplying Matrixes \\}
+\author{Johannes~Schwartzkopff, Finn~Baumann }
+\date{date}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+%TODO; Write Introduction
+
+\section{Mathematics}
+From the assignment we are given \textbf{Definition 1} (Matrix product); Given two operand matrices $\mathbf{A}$ and $\mathbf{B}$ of shape $n$ x $n$, we define the matrix product $\mathbf{C} = \mathbf{AB}$ to be the $n$ x $n$ matrix $\mathbf{C}$ that satisfies:
+\begin{equation}
+    c_{ij}\sum_{k=1}^{n} a_{ik}b_{kj}
+    \label{eq:1}
+\end{equation}
+Equation~\ref{eq:1} describes how each $c_{ij}$ is the dot product of the $i$th row of $A$ and the $j$th row of $B$, where dot product is the sum of the products of corresponding entries in the rows/columns. For a visualisation see below.
+  $$
+     \begin{bmatrix}
+         a_1 & a_2\\ 
+         a_3 & a_4 
+     \end{bmatrix}
+     \times
+     \begin{bmatrix}
+         b_1 & b_2\\ 
+         b_3 & b_4  
+     \end{bmatrix}
+      =
+     \begin{bmatrix}
+         (a_1*b_1+a_2*b_3) & (a_1*b_2+a_2*b_4)\\ 
+         (a_3*b_1+a_4*b_3) & (a_3*b_2+a_4*b_4)   
+     \end{bmatrix}
+  $$
+\bigskip
+
+We refer to the transposition of a matrix as the swapping of its rows and columns. As such matrix $\mathbf{A}$ becomes $\mathbf{A}^\top$ when it is transposed. This means that $a^{\top}_{ij}=a_{ji}$, as seen below.
+  $$
+     \begin{bmatrix}
+         a_1 & a_2\\ 
+         a_3 & a_4 
+     \end{bmatrix}
+     =
+     \begin{bmatrix}
+     a_1 & a_3\\
+     a_2 & a_4
+     \end{bmatrix}
+ $$ 
+
+Lastly, as within the scope of this project all matrices are square, they can thus be divided into their four block matrices. These blocks are the four corner matrices which make up the main matrix, which we denote as per the example below.
+  $$
+     A
+     =
+     \begin{bmatrix}
+     A_{11} & A_{12}\\
+     A_{21} & A_{22}
+     \end{bmatrix}
+ $$ 
+This leads to the following: 
+  $$
+  A=
+     \begin{bmatrix}
+         a_1 & a_2\\ 
+         a_3 & a_4 
+     \end{bmatrix}
+     =
+     \begin{bmatrix}
+     a_1 & a_3\\
+     a_2 & a_4
+     \end{bmatrix}
+ $$ 
+
+\section{Implementation}
+%TODO; Short description of the Matrix.java class
+
+\subsection{Elementary Multiplication}
+\label{sec:elem_mult}
+The elementary multiplication algorithm implements Equation~\ref{eq:1} by using three nested loops, ensuring that each $c_{ij}$ in a Matrix $C$ is the sum of the products of the relevant rows and columns from $A$ and $B$. It does so by within each loop over possible values of $i$, looping over all possible values of $j$ and within each such loop, looping over all values for $k$. The elementary multiplication algorithm is naive in the sense that it performs the matrix multiplication much like a person would, going step by step within matrix $C$ and adding up the relevant products from $A$ and $B$. Other algorithms will showcase how this is not optimal.
+
+\subsection{Transpose and Recursive Transpose}
+In the case of matrices being stored in row-major order, the elementary multiplication theoretically performs better for reasons explained in Section~\ref{sec:transpose} if the right-hand operand is transposed. Transposition 
+
+\subsection{Elementary Multiplication with Recursive Transpose}
+\label{sec:transpose}
+
+\subsection{Tiled Multiplication}
+
+The Tiled Matrix Multiplication breaks up the multiplication problem into smaller sub-multiplications. It does this by dividing the $n \times n$ input matrices into $\frac{n}{s}$ tiles, where $s$ divides $n$. The tiles are created using three nested for-loops each iterating from $0$ to $\frac{n}{s}$. During each iteration two views are created from the input-matrices $A$ and $B$ representing the tiles. The tiles are multiplied using the Elementary Multiplication (see section \ref{sec:elem_mult}) with result is stored in the intermediate Matrix $I$. Subsequently, we iterate over $I$ to put each element $I_i_j$ into the correct place of the result matrix $C$.
+
+Furthermore, $s$ is provided as an input parameter to the algorithm in order to experiment with various sizes of $s$. This is of interest because if $s$ is sufficiently small the tiles can fit into the cache which reduces the number of cache misses and subsequently the algorithms running time. Because the tiling of the input matrices comes with an overhead the choice of an optimal $s$ is not trivial. The optimal choice of $s$ depends highly on the hardware being used.
+
+\subsection{Recursive Multiplication}
+
+\subsection{Strassens Algorithm}
+
+\section{Testing}
+
+\section{Experiments}
+
+\section{Results}
+
+\section{Conclusion}
+
+\section{References}
+
+\section{Appendix}
+
+\end{document}
