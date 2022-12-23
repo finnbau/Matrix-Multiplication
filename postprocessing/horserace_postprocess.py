@@ -25,8 +25,10 @@ df = df[df.time_in_milliseconds!='timeout'] #Remove timeouts for aggregation
 df['time_in_milliseconds'] = pd.to_numeric(df['time_in_milliseconds']) #Some means were =inf because of type. This fixed it.
 df_grouped = df.groupby(['algorithm','n','s']).agg(
         {'time_in_milliseconds':['min','mean','median','std','max']}
-)
+).round()
+#df_grouped['time_in_milliseconds','mean'] = df_grouped['mean'].apply(lambda x: round(x, 0))
+#df_grouped['std'] = df_grouped['std'].apply(lambda x: round(x, 2))
 print(df_grouped)
 
-with open('horse_latex', 'w') as tf:
+with open('horse_latex.tex', 'w') as tf:
      tf.write(df_grouped.to_latex())
