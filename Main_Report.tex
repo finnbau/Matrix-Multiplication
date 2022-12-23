@@ -93,7 +93,7 @@ In the case of matrices being stored in row-major order, the elementary multipli
 
 \subsection{Tiled Multiplication}
 
-The Tiled Matrix Multiplication breaks up the multiplication problem into smaller sub-multiplications. It does this by dividing the $n \times n$ input matrices into $\frac{n}{s}$ tiles, where $s$ divides $n$. The tiles are created using three nested for-loops each iterating from $0$ to $\frac{n}{s}$. During each iteration two views are created from the input-matrices $A$ and $B$ representing the tiles. The tiles are multiplied using the Elementary Multiplication (see section \ref{sec:elem_mult}) with result is stored in the intermediate Matrix $I$. Subsequently, we iterate over $I$ to put each element $I_i_j$ into the correct place of the result matrix $C$.
+The Tiled Matrix Multiplication breaks up the multiplication problem into smaller sub-multiplications. It does this by dividing the $n \times n$ input matrices into $\frac{n}{s}$ tiles, where $s$ divides $n$. The tiles are created using three nested for-loops each iterating from $0$ to $\frac{n}{s}$. During each iteration two views are created from the input-matrices $A$ and $B$ representing the tiles. The tiles are multiplied using the Elementary Multiplication (see section \ref{sec:elem_mult}) with result is stored in the intermediate Matrix $I$. Subsequently, we iterate over $I$ to put each element $I_{ij}$ into the correct place of the result matrix $C$.
 
 Furthermore, $s$ is provided as an input parameter to the algorithm in order to experiment with various sizes of $s$. This is of interest because if $s$ is sufficiently small the tiles can fit into the cache which reduces the number of cache misses and subsequently the algorithms running time. Because the tiling of the input matrices comes with an overhead the choice of an optimal $s$ is not trivial. The optimal choice of $s$ depends highly on the hardware being used.
 
@@ -106,6 +106,15 @@ Furthermore, $s$ is provided as an input parameter to the algorithm in order to 
 \section{Experiments}
 
 \section{Results}
+
+
+\begin{table}[p]
+\begin{center}
+\label{tbl:horse}
+\input{horse_latex}
+\caption{Horserace results}
+\end{center}
+\end{table}
 
 \section{Conclusion}
 
