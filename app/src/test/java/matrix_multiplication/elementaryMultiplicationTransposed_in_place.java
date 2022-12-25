@@ -1,6 +1,7 @@
 package matrix_multiplication;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,21 +9,28 @@ public class elementaryMultiplicationTransposed_in_place {
 
     private static Matrix m2;
     private static Matrix m2_squared;
+    private static Matrix m2_squared_wrong;
     private static Matrix m4;
     private static Matrix m4_squared;
+    private static Matrix m4_squared_wrong;
     private static Matrix m8;
     private static Matrix m8_squared;
+    private static Matrix m8_squared_wrong;
     private static Matrix m16;
     private static Matrix m16_squared;
+    private static Matrix m16_squared_wrong;
 
     @Before
     public void init() {
         m2 = new Matrix(2, 2, new double[] { 1, 2, 3, 4 });
         m2_squared = new Matrix(2, 2, new double[] { 7, 10, 15, 22 });
+        m2_squared_wrong = new Matrix(2, 2, new double[] { 1, 1, 1, 1 });
 
         m4 = new Matrix(4, 4, new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
         m4_squared = new Matrix(4, 4,
                 new double[] { 90, 100, 110, 120, 202, 228, 254, 280, 314, 356, 398, 440, 426, 484, 542, 600 });
+        m4_squared_wrong = new Matrix(4, 4,
+                new double[] {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1});
 
         m8 = new Matrix(8, 8, new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
@@ -33,6 +41,8 @@ public class elementaryMultiplicationTransposed_in_place {
                         8544, 8804, 9096, 9388, 9680, 9972, 10264, 10556, 10848, 10660, 11016, 11372, 11728, 12084,
                         12440, 12796, 13152, 12516, 12936, 13356, 13776, 14196, 14616, 15036, 15456, 14372, 14856,
                         15340, 15824, 16308, 16792, 17276, 17760 });
+        m8_squared_wrong = new Matrix(8, 8,
+            new double[] { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 });
 
         m16 = new Matrix(16, 16, new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
                 21,
@@ -68,6 +78,11 @@ public class elementaryMultiplicationTransposed_in_place {
                 496480, 500200, 503920, 507640, 511360, 486536, 490512, 494488, 498464, 502440, 506416, 510392, 514368,
                 518344, 522320, 526296, 530272, 534248, 538224, 542200, 546176
         });
+        m16_squared_wrong = new Matrix(16, 16, new double[] { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+        });
 
     }
 
@@ -81,6 +96,16 @@ public class elementaryMultiplicationTransposed_in_place {
         Matrix expected = m2_squared;
         assertEquals(expected, actual);
     }
+    @Test
+    public void elementaryMultiplicationTest_m2_wrong() {
+        int n = 2;
+        int s = 1;
+
+        Matrix actual = new Matrix(n, n);
+        Matrix.elementaryMultiplicationTransposed(m2, m2, actual, s);
+        Matrix expected = m2_squared_wrong;
+        assertNotEquals(expected, actual);
+    }
 
     @Test
     public void elementaryMultiplicationTest_m4() {
@@ -91,6 +116,16 @@ public class elementaryMultiplicationTransposed_in_place {
         Matrix.elementaryMultiplicationTransposed(m4, m4, actual, s);
         Matrix expected = m4_squared;
         assertEquals(expected, actual);
+    }
+    @Test
+    public void elementaryMultiplicationTest_m4_wrong() {
+        int n = 4;
+        int s = 2;
+
+        Matrix actual = new Matrix(n, n);
+        Matrix.elementaryMultiplicationTransposed(m4, m4, actual, s);
+        Matrix expected = m4_squared_wrong;
+        assertNotEquals(expected, actual);
     }
 
     @Test
@@ -103,6 +138,16 @@ public class elementaryMultiplicationTransposed_in_place {
         Matrix expected = m8_squared;
         assertEquals(expected, actual);
     }
+    @Test
+    public void elementaryMultiplicationTest_m8_s2_wrong() {
+        int n = 8;
+        int s = 2;
+
+        Matrix actual = new Matrix(n, n);
+        Matrix.elementaryMultiplicationTransposed(m8, m8, actual, s);
+        Matrix expected = m8_squared_wrong;
+        assertNotEquals(expected, actual);
+    }
 
     @Test
     public void elementaryMultiplicationTest_m8_s4() {
@@ -113,6 +158,16 @@ public class elementaryMultiplicationTransposed_in_place {
         Matrix.elementaryMultiplicationTransposed(m8, m8, actual, s);
         Matrix expected = m8_squared;
         assertEquals(expected, actual);
+    }
+    @Test
+    public void elementaryMultiplicationTest_m8_s4_wrong() {
+        int n = 8;
+        int s = 4;
+
+        Matrix actual = new Matrix(n, n);
+        Matrix.elementaryMultiplicationTransposed(m8, m8, actual, s);
+        Matrix expected = m8_squared_wrong;
+        assertNotEquals(expected, actual);
     }
 
     @Test
@@ -125,6 +180,16 @@ public class elementaryMultiplicationTransposed_in_place {
         Matrix expected = m16_squared;
         assertEquals(expected, actual);
     }
+    @Test
+    public void elementaryMultiplicationTest_m16_s2_wrong() {
+        int n = 16;
+        int s = 2;
+
+        Matrix actual = new Matrix(n, n);
+        Matrix.elementaryMultiplicationTransposed(m16, m16, actual, s);
+        Matrix expected = m16_squared_wrong;
+        assertNotEquals(expected, actual);
+    }
 
     @Test
     public void elementaryMultiplicationTest_m16_s4() {
@@ -135,6 +200,16 @@ public class elementaryMultiplicationTransposed_in_place {
         Matrix.elementaryMultiplicationTransposed(m16, m16, actual, s);
         Matrix expected = m16_squared;
         assertEquals(expected, actual);
+    }
+    @Test
+    public void elementaryMultiplicationTest_m16_s4_wrong() {
+        int n = 16;
+        int s = 4;
+
+        Matrix actual = new Matrix(n, n);
+        Matrix.elementaryMultiplicationTransposed(m16, m16, actual, s);
+        Matrix expected = m16_squared_wrong;
+        assertNotEquals(expected, actual);
     }
 
     @Test
