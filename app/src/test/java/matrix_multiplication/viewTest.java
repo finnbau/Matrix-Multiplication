@@ -21,12 +21,20 @@ public class viewTest {
     }
 
     @Test
-    public void transposeTest_m2() {
+    public void view_quarter_test() {
+        Matrix actual= m8.view(0,0,m8.cols/2,m8.cols/2);
+
+        Matrix expected = new Matrix(4, 4, new double[]{1,2,3,4,9,10,11,12,17,18,19,20,25,26,27,28});
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void view_of_view_test() {
         Matrix firstView = m8.view(0,0,m8.cols/2,m8.cols/2);
 
         Matrix actual = firstView.view(2,2,firstView.cols/2,firstView.cols/2);
         Matrix expected = new Matrix(2, 2, new double[]{19,20,27,28});
         assertEquals(expected, actual);
     }
+
 
 }
