@@ -32,3 +32,39 @@ print(df_grouped)
 
 with open('horse_latex.tex', 'w') as tf:
      tf.write(df_grouped.to_latex())
+
+#Make individual tables for each algorithm
+df_ele = df[df.algorithm=='Elementary']
+df_ele = df_ele.groupby(['algorithm','n','s']).agg(
+        {'time_in_milliseconds':['min','mean','median','std','max']}
+).round()
+with open('horse_latex_ele.tex', 'w') as tf:
+     tf.write(df_ele.to_latex())
+
+df_trans = df[df.algorithm=='Transposed']
+df_trans = df_trans.groupby(['algorithm','n','s']).agg(
+        {'time_in_milliseconds':['min','mean','median','std','max']}
+).round()
+with open('horse_latex_trans.tex', 'w') as tf:
+     tf.write(df_trans.to_latex())
+
+df_tiled = df[df.algorithm=='Tiled']
+df_tiled = df_tiled.groupby(['algorithm','n','s']).agg(
+        {'time_in_milliseconds':['min','mean','median','std','max']}
+).round()
+with open('horse_latex_tiled.tex', 'w') as tf:
+     tf.write(df_tiled.to_latex())
+
+df_rec = df[df.algorithm=='Recursive']
+df_rec = df_rec.groupby(['algorithm','n','s']).agg(
+        {'time_in_milliseconds':['min','mean','median','std','max']}
+).round()
+with open('horse_latex_rec.tex', 'w') as tf:
+     tf.write(df_rec.to_latex())
+
+df_strassen = df[df.algorithm=='Strassen']
+df_strassen = df_strassen.groupby(['algorithm','n','s']).agg(
+        {'time_in_milliseconds':['min','mean','median','std','max']}
+).round()
+with open('horse_latex_strassen.tex', 'w') as tf:
+     tf.write(df_strassen.to_latex())
