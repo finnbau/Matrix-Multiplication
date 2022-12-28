@@ -18,6 +18,8 @@
 %TODO; Write Introduction
 
 \section{Mathematics}
+\label{sec:mathematics}
+
 From the assignment we are given \textbf{Definition 1} (Matrix product); Given two operand matrices $\mathbf{A}$ and $\mathbf{B}$ of shape $n$ x $n$, we define the matrix product $\mathbf{C} = \mathbf{AB}$ to be the $n$ x $n$ matrix $\mathbf{C}$ that satisfies:
 \begin{equation}
     c_{ij}\sum_{k=1}^{n} a_{ik}b_{kj}
@@ -55,7 +57,9 @@ We refer to the transposition of a matrix as the swapping of its rows and column
      \end{bmatrix}
  $$ 
 
-Lastly, as within the scope of this project all matrices are square, they can thus be divided into their four block matrices. These blocks are the four corner matrices which make up the main matrix, which we denote as per the example below.
+Lastly, as within the scope of this project all matrices are square, they can thus be divided into their four block matrices. These blocks are the four corner matrices which make up the main matrix, which we denote as per Figure~\ref{fig:Matrix blocks}.
+\begin{figure}
+    \centering
   $$
      A
      =
@@ -64,6 +68,10 @@ Lastly, as within the scope of this project all matrices are square, they can th
      A_{21} & A_{22}
      \end{bmatrix}
  $$ 
+    \caption{Matrix blocks}
+    \label{fig:Matrix blocks}
+\end{figure}
+
 This leads to the following: 
   $$
   A=
@@ -79,31 +87,47 @@ This leads to the following:
  $$ 
 
 \section{Implementation}
-%TODO; Short description of the Matrix.java class
+Our implementation of a matrix is based upon the course supplied class \textbf{Matrix.java}. The class represents a matrix as well as implementation for the creation of sub-matrices. The class contains several fields, two of which we added ourselves. Firstly, it contains fields \textbf{rows} and \textbf{columns}, representing their namesake. An array of doubles, \textbf{data}, contains the elements of the matrix, stored in row-major order. This array belongs in entirety to both the matrices and any sub-matrices of it. The integer field \textbf{start} represents where in \textbf{data} the matrix' upper-left corner is, being 0 for the original matrix and a calculated value for sub-matrices. The field \textbf{stride} denotes how many steps through \textbf{data} one must take to move down a column of the matrix. For the default case this is equal to $n$, and for sub-matrices it will always be the equal to $n$ of the original matrix. Following the syntax used in Figure~\ref{fig:Matrix blocks}, we added the fields \textbf{one} and \textbf{two}, such that these represent what they do in the figure, meaning a sub-matrix created with, for example, (\textbf{two},\textbf{one}), would result in it being the lower left quarter of the original matrix as per Figure~\ref{fig:Matrix blocks}.
 
 \subsection{Elementary Multiplication}
 \label{sec:elem_mult}
 The elementary multiplication algorithm implements Equation~\ref{eq:1} by using three nested loops, ensuring that each $c_{ij}$ in a Matrix $C$ is the sum of the products of the relevant rows and columns from $A$ and $B$. It does so by within each loop over possible values of $i$, looping over all possible values of $j$ and within each such loop, looping over all values for $k$. The elementary multiplication algorithm is naive in the sense that it performs the matrix multiplication much like a person would, going step by step within matrix $C$ and adding up the relevant products from $A$ and $B$. Other algorithms will showcase how this is not optimal.
 
 \subsection{Transpose and Recursive Transpose}
-In the case of matrices being stored in row-major order, the elementary multiplication theoretically performs better for reasons explained in Section~\ref{sec:transpose} if the right-hand operand is transposed. Transposition 
+The transposition of matrices can be useful for multiplication purposes for reasons explained in Section~\ref{sec:transpose}. The basic transpose simply goes along rows and columns, swapping values between sizes. To allow for more cache efficient transposition, a recursive version, where the matrices are split into $n/2$ x $n/2$ sub-matrices until are certain point, before being regularly transposed, is also implemented.
 
 \subsection{Elementary Multiplication with Recursive Transpose}
 \label{sec:transpose}
+The elementary multiplication algorithm theoretically performs better if one of it's elements is transposed before multiplication occurs. This causes the innermost loop of the multiplication to access both matrices sequentially, increasing read performance. In the case of matrices being stored in row-major order, as is the case for our implementation, it is the right-hand element which is transposed and vice versa for column-major order. Along with this additional step, elementary multiplication with recursive transposition works exactly like elementary multiplication.
 
 \subsection{Tiled Multiplication}
 
-The Tiled Matrix Multiplication breaks up the multiplication problem into smaller sub-multiplications. It does this by dividing the $n \times n$ input matrices into $\frac{n}{s}$ tiles, where $s$ divides $n$. The tiles are created using three nested for-loops each iterating from $0$ to $\frac{n}{s}$. During each iteration two views are created from the input-matrices $A$ and $B$ representing the tiles. The tiles are multiplied using the Elementary Multiplication (see section \ref{sec:elem_mult}) with result is stored in the intermediate Matrix $I$. Subsequently, we iterate over $I$ to put each element $I_{ij}$ into the correct place of the result matrix $C$.
+The Tiled Matrix Multiplication breaks up the multiplication problem into smaller sub-multiplications. It does this by dividing the $n \times n$ input matrices into $\frac{n}{s}$ tiles, where $s$ divides $n$. The tiles are created using three nested for-loops each iterating from $0$ to $\frac{n}{s}$. During each iteration two views are created from the input-matrices $A$ and $B$ representing the tiles. The tiles are multiplied using the Elementary Multiplication (see section \ref{sec:elem_mult}) with the result being stored in the intermediate Matrix $I$. Subsequently, we iterate over $I$ to put each element $I_{ij}$ into the correct place of the result matrix $C$.
 
 Furthermore, $s$ is provided as an input parameter to the algorithm in order to experiment with various sizes of $s$. This is of interest because if $s$ is sufficiently small the tiles can fit into the cache which reduces the number of cache misses and subsequently the algorithms running time. Because the tiling of the input matrices comes with an overhead the choice of an optimal $s$ is not trivial. The optimal choice of $s$ depends highly on the hardware being used.
 
 \subsection{Recursive Multiplication}
 
-\subsection{Strassens Algorithm}
+The underlying idea of the Recursive Matrix Multiplication algorithm is comparable to the Tiled Matrix Multiplication. Also in the Recursive Multiplication the factors (matrices $A$ and $B$) are multiplied by applying the Elementary Multiplication on sub-matrices of $A$ and $B$. If the sub-matrices are of size $1\times1$ the matrix-elements are multiplied using scalar multiplication instead of Elementary Multiplication.
 
+The division of the factors into sub-matrices is done using recursive function calls. Recursive Multiplication takes an integer $s$ and the matrices $A$, $B$ and $C$ as arguments. $s$ specifies the sub-problem size to which the factors should be broken down. If the input matrices are larger than $s$ they are divided into their four sub-matrices as explained in section \ref{sec:mathematics}. For each relevant multiplication of these sub-matrices a recursive function call is made, resulting in eight recursive calls per iteration. Elementary Multiplication is applied when the sub-matrix size $n$ is smaller or equal to $s$. As mentioned, scalar multiplication is used if $n = 1$.
+The division into sub-matrices is done using views so that no copies of the input matrices are created.
+The simple application of Elementary Multiplication on the sub-matrices is sufficient because it functions additively, meaning that the results of $A_{sub} \times B_{sub}$ are added in the correct places of $C$ rather than overwriting existing values.
+
+\subsection{Strassen's Algorithm}
+
+Strassen's Algorithm also works recursively but takes advantage of the fact the multiplication can be done with seven recursive calls per iteration rather than eight. This is achieved by reformulating the underlying equations used in the recursive calls in the Recursive Multiplication. Furthermore, 21 intermediary matrices are used in Strassen's Algorithm which are not shallow copies.
+
+Strassen's Algorithm takes the same parameters as Recursive Multiplication. Namely, the factor matrices $A$ and $B$, the product matrix $C$ and the integer $s$ specifying the sub-problem size to which the matrices should be broken down. If the input matrices size $n = 1$ scalar multiplication is used. If $n \leq s$ Elementary Multiplication is applied. Else the matrices are recursively split into sub-matrices further until the sub-problem size is reached. Firstly, the intermediary matrices $P_1 ... P_7$ and $Q_1 ... Q_7$ are calculated using the formulas in the instructions and stored as deep copies. The intermediary matrices $M_1 ... M_7$ are calculated by instantiating empty matrices $M_i$ and recursively invoking Strassen's Algorithm with the matrices $P_i$, $Q_i$ and $M_i$. Subsequently, the four sub-matrices of $C$ are calculated using four quadratic for-loops iterating over the intermediary matrices and applying scalar addition to the relevant elements of the matrices, again following the formulas in the instructions.
+
+%% Should testing be a subsection of implementation? We don't have much to say.
 \section{Testing}
+We carried out unit testing for all used functions of our implementation, ensuring their correct functioning. All multiplication algorithms and both transposition functions were tested on matrices of sizes $n=\{2,4,8,16\}$, with an appropriate variety of $s$ when applicable. Tests were done for both positive and negative cases for good measure, following good testing protocols. This despite the negative cases merely showing that the supplied \textbf{equals} function works. The supplied \textbf{view} function was also tested, herein a view of a view test. The comprehensive testing helps ensure validity of our experimental results.
 
 \section{Experiments}
+\subsection{Hardware Setup}
+%Here you write about your computer Finn
+
 
 \section{Results}
 
