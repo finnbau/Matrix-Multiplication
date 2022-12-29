@@ -35,7 +35,8 @@ with open('horse_latex.tex', 'w') as tf:
 
 #Make individual tables for each algorithm
 df_ele = df[df.algorithm=='Elementary']
-df_ele = df_ele.groupby(['algorithm','n','s']).agg(
+df_ele = df_ele.drop('s',axis=1)
+df_ele = df_ele.groupby(['algorithm','n']).agg(
         {'time_in_milliseconds':['min','mean','median','std','max']}
 ).round()
 with open('horse_latex_ele.tex', 'w') as tf:
