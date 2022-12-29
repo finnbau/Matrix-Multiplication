@@ -71,6 +71,7 @@ with open('horse_latex_strassen.tex', 'w') as tf:
      tf.write(df_strassen.to_latex())
 
 #Making table with optimal values of s for each algorithm at each n.
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Transposed') & (df.n==1024) & (df.s!=8)].index)
 df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Transposed') & (df.n==2048) & (df.s!=64)].index)
