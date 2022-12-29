@@ -71,20 +71,30 @@ with open('horse_latex_strassen.tex', 'w') as tf:
      tf.write(df_strassen.to_latex())
 
 #Making table with optimal values of s for each algorithm at each n.
-
 df = df.drop(df[(df.algorithm=='Transposed') & (df.n==1024) & (df.s!=8)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Transposed') & (df.n==2048) & (df.s!=64)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Transposed') & (df.n==4096) & (df.s!=4)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Tiled') & (df.n==1024) & (df.s!=8)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Tiled') & (df.n==2048) & (df.s!=8)].index)
+df.reset_index(drop=True, inplace=True)
 # Tiled only finished n=4096 at s=8
 df = df.drop(df[(df.algorithm=='Recursive') & (df.n==1024) & (df.s!=8)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Recursive') & (df.n==2048) & (df.s!=8)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Recursive') & (df.n==4096) & (df.s!=8)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Strassen') & (df.n==1024) & (df.s!=64)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Strassen') & (df.n==2048) & (df.s!=64)].index)
+df.reset_index(drop=True, inplace=True)
 df = df.drop(df[(df.algorithm=='Strassen') & (df.n==4096) & (df.s!=64)].index)
-
+df.reset_index(drop=True, inplace=True)
+print(df.to_string())
 df_grouped = df.groupby(['algorithm','n','s']).agg(
         {'time_in_milliseconds':['min','mean','median','std','max']}
 ).round()
