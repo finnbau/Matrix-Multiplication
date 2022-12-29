@@ -125,11 +125,20 @@ Strassen's Algorithm takes the same parameters as Recursive Multiplication. Name
 We carried out unit testing for all used functions of our implementation, ensuring their correct functioning. All multiplication algorithms and both transposition functions were tested on matrices of sizes $n=\{2,4,8,16\}$, with an appropriate variety of $s$ when applicable. Tests were done for both positive and negative cases for good measure, following good testing protocols. This despite the negative cases merely showing that the supplied \textbf{equals} function works. The supplied \textbf{view} function was also tested, herein a view of a view test. The comprehensive testing helps ensure validity of our experimental results.
 
 \section{Experiments}
+
 \subsection{Hardware Setup}
 %Here you write about your computer Finn
 
 
 \section{Results}
+\subsection{Elementary Multiplication}
+\begin{table}[p]
+\begin{center}
+\label{tbl:horse_ele}
+\input{horse_latex_ele.tex}
+\caption{Elementary multiplication results}
+\end{center}
+\end{table}
 
 
 \begin{table}[p]
