@@ -131,21 +131,51 @@ We carried out unit testing for all used functions of our implementation, ensuri
 
 
 \section{Results}
+We will here report the time it took the different algorithms to complete multiplications at different sizes of $n$, reporting $s$ when appropriate. For each algorithm, we report, at each $n$, only the optimal $s$. Results for all utilized $s$ can be found in the appendix. The optimal $s$ for an algorithms at a given $n$ is chosen based on the mean runtime.
+
 \subsection{Elementary Multiplication}
+The elementary multiplication algorithm performs 
 \begin{table}[p]
 \begin{center}
 \label{tbl:horse_ele}
 \input{horse_latex_ele.tex}
-\caption{Elementary multiplication results}
+\caption{Elementary Multiplication results}
 \end{center}
 \end{table}
 
-
+\subsection{Elementary Transposed Multiplication}
 \begin{table}[p]
 \begin{center}
-\label{tbl:horse}
-\input{horse_latex}
-\caption{Horserace results}
+\label{tbl:horse_trans}
+\input{horse_latex_trans.tex}
+\caption{Elementary Transposed Multiplication results}
+\end{center}
+\end{table}
+
+\subsection{Tiled Multiplication}
+\begin{table}[p]
+\begin{center}
+\label{tbl:horse_tiled}
+\input{horse_latex_tiled.tex}
+\caption{Tiled Multiplication results}
+\end{center}
+\end{table}
+
+\subsection{Recursive Multiplication}
+\begin{table}[p]
+\begin{center}
+\label{tbl:horse_rec}
+\input{horse_latex_rec.tex}
+\caption{Recursive Multiplication results}
+\end{center}
+\end{table}
+
+\subsection{Strassen Multiplication}
+\begin{table}[p]
+\begin{center}
+\label{tbl:horse_strassen}
+\input{horse_latex_strassen.tex}
+\caption{Strassen Multiplication results}
 \end{center}
 \end{table}
 
@@ -154,5 +184,6 @@ We carried out unit testing for all used functions of our implementation, ensuri
 \section{References}
 
 \section{Appendix}
+
 
 \end{document}
